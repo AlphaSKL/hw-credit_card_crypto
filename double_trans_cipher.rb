@@ -20,16 +20,14 @@ module DoubleTranspositionCipher
   def self.process(document, key, flag)
     document = document.to_s.chars
     row_num, col_num = find_row_col(document.length)
-    blocks = document.each_slice(col_num).to_a
-    shuffle_rows = (0...row_num).to_a.shuffle(random: Random.new(key))
-    shuffle_cols = (0...col_num).to_a.shuffle(random: Random.new(key))
-    blocks = reorder(blocks, shuffle_rows,flag)
-    blocks.map { | row | reorder(row, shuffle_cols,flag).join('') }.join('')
+    blocks = reorder( document.each_slice(col_num).to_a, key, flag)
+    blocks.map { | row | reorder(row, key, flag).join('') }.join('')
   end
 
-  def self.reorder(arr, order, flag)
+  def self.reorder(arr, key, flag)
     temp = Array.new(arr.length)
-    order.each_with_index { |num, i|
+    shuffle_arr = (0...arr.length).to_a.shuffle(random: Random.new(key))
+    shuffle_arr.each_with_index { |num, i|
       if flag
       temp[i] = arr[num] 
       else
@@ -52,7 +50,7 @@ end
 cc = CreditCard.new('6011672939740296', 'Mar-30-2020', 'Soumya Ray', 'Visa')
 key = 3
 
-enc = DoubleTranspositionCipher.encrypt("6011672939740296", key)
+enc = DoubleTranspositionCipher.encrypt(cc, key)
 dec = DoubleTranspositionCipher.decrypt(enc, key)
 
 puts enc
