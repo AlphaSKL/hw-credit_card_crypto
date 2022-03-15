@@ -19,22 +19,24 @@ module DoubleTranspositionCipher
 
   def self.process(document, key, flag)
     document = document.to_s.chars
-    row, col = find_row_col(document.length)
-    blocks = document.each_slice(col).to_a
-    shuffle_rows = (0...row).to_a.shuffle(random: Random.new(key))
-    shuffle_cols = (0...col).to_a.shuffle(random: Random.new(key))
-    blocks = shuffle_rows.map { |index| blocks[index] }
-    blocks.map { | row |
-      temp = Array.new(row.length)
-      shuffle_cols.each_with_index { |num, i|
-        if flag
-         temp[i] = row[num] 
-        else
-          temp[num] = row[i]
-        end
-      }
-      temp.join('')
-    }.join('')
+    row_num, col_num = find_row_col(document.length)
+    blocks = document.each_slice(col_num).to_a
+    shuffle_rows = (0...row_num).to_a.shuffle(random: Random.new(key))
+    shuffle_cols = (0...col_num).to_a.shuffle(random: Random.new(key))
+    blocks = reorder(blocks, shuffle_rows,flag)
+    blocks.map { | row | reorder(row, shuffle_cols,flag).join('') }.join('')
+  end
+
+  def self.reorder(arr, order, flag)
+    temp = Array.new(arr.length)
+    order.each_with_index { |num, i|
+      if flag
+      temp[i] = arr[num] 
+      else
+        temp[num] = arr[i]
+      end
+    }
+    temp
   end
 
   def self.find_row_col(number)
@@ -47,10 +49,10 @@ module DoubleTranspositionCipher
   end
 end
 
-cc = CreditCard.new('4916603231464963', 'Mar-30-2020', 'Soumya Ray', 'Visa')
+cc = CreditCard.new('6011672939740296', 'Mar-30-2020', 'Soumya Ray', 'Visa')
 key = 3
 
-enc = DoubleTranspositionCipher.encrypt(cc, key)
+enc = DoubleTranspositionCipher.encrypt("6011672939740296", key)
 dec = DoubleTranspositionCipher.decrypt(enc, key)
 
 puts enc
