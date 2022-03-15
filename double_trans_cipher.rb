@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative './credit_card'
 
+# DoubleTranspositionCipher encrypt and decrypt algorithm
 module DoubleTranspositionCipher
   def self.encrypt(document, key)
     # TODO: FILL THIS IN!
@@ -19,30 +22,28 @@ module DoubleTranspositionCipher
 
   def self.process(document, key, flag)
     document = document.to_s.chars
-    row_num, col_num = find_row_col(document.length)
-    blocks = reorder( document.each_slice(col_num).to_a, key, flag)
-    blocks.map { | row | reorder(row, key, flag).join('') }.join('')
+    _row_num, col_num = find_row_col(document.length)
+    blocks = reorder(document.each_slice(col_num).to_a, key, flag)
+    blocks.map { |row| reorder(row, key, flag).join('') }.join('')
   end
 
   def self.reorder(arr, key, flag)
     temp = Array.new(arr.length)
     shuffle_arr = (0...arr.length).to_a.shuffle(random: Random.new(key))
-    shuffle_arr.each_with_index { |num, i|
+    shuffle_arr.each_with_index do |num, i|
       if flag
-      temp[i] = arr[num] 
+        temp[i] = arr[num]
       else
         temp[num] = arr[i]
       end
-    }
+    end
     temp
   end
 
   def self.find_row_col(number)
-    root = (number ** 0.5).round
+    root = (number**0.5).round
     (root).downto(1) do |i|
-      if (number/i) * i == number
-        return i, number/i
-      end 
+      return i, number / i if (number / i) * i == number
     end
   end
 end
