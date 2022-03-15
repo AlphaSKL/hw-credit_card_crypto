@@ -26,11 +26,13 @@ module DoubleTranspositionCipher
     blocks = shuffle_rows.map { |index| blocks[index] }
     blocks.map { | row |
       temp = Array.new(row.length)
-      if flag
-        shuffle_cols.each_with_index { |num, i| temp[i] = row[num] }
-      else
-        shuffle_cols.each_with_index { |num, i| temp[num] = row[i] }
-      end
+      shuffle_cols.each_with_index { |num, i|
+        if flag
+         temp[i] = row[num] 
+        else
+          temp[num] = row[i]
+        end
+      }
       temp.join('')
     }.join('')
   end
