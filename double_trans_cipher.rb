@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative './credit_card'
-
 # DoubleTranspositionCipher encrypt and decrypt algorithm
 module DoubleTranspositionCipher
   def self.encrypt(document, key)
@@ -47,12 +45,3 @@ module DoubleTranspositionCipher
     end
   end
 end
-
-cc = CreditCard.new('6011672939740296', 'Mar-30-2020', 'Soumya Ray', 'Visa')
-key = 3
-
-enc = DoubleTranspositionCipher.encrypt(cc, key)
-dec = DoubleTranspositionCipher.decrypt(enc, key)
-
-puts enc
-puts dec
