@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module SubstitutionCipher
+  # Caesar
   module Caesar
     # Encrypts document using key
     # Arguments:
@@ -21,6 +24,7 @@ module SubstitutionCipher
     end
   end
 
+  # Permutation
   module Permutation
     # Encrypts document using key
     # Arguments:
