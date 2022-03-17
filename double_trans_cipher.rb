@@ -19,29 +19,26 @@ module DoubleTranspositionCipher
   end
 
   def self.process(document, key, flag)
-    document = document.to_s.chars
-    _row_num, col_num = find_row_col(document.length)
-    blocks = reorder(document.each_slice(col_num).to_a, key, flag)
-    blocks.map { |row| reorder(row, key, flag).join('') }.join('')
+    square_root, padding_doc = find_length_padding(document.to_s)
+    slice_doc = padding_doc.to_s.chars.each_slice(square_root).to_a
+    blocks = reorder(slice_doc, key, flag)
+    result = blocks.map { |row| reorder(row, key, flag).join('') }.join('')
+    flag ? result : result.strip
   end
 
   def self.reorder(arr, key, flag)
     temp = Array.new(arr.length)
     shuffle_arr = (0...arr.length).to_a.shuffle(random: Random.new(key))
     shuffle_arr.each_with_index do |num, i|
-      if flag
-        temp[i] = arr[num]
-      else
-        temp[num] = arr[i]
-      end
+      flag ? temp[i] = arr[num] : temp[num] = arr[i]
     end
     temp
   end
 
-  def self.find_row_col(number)
-    root = (number**0.5).round
-    (root).downto(1) do |i|
-      return i, number / i if (number / i) * i == number
-    end
+  def self.find_length_padding(document)
+    number = document.length
+    root = (number**0.5).ceil
+    padding_num = root**2 - number
+    [root, ' ' * padding_num + document]
   end
 end
