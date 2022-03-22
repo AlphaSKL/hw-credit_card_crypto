@@ -2,6 +2,7 @@
 
 require_relative './luhn_validator'
 require 'json'
+require 'openssl'
 
 # Crypto on credit card, including error checking (data integrity) algorithm and very elementary crypto algorithms
 class CreditCard
@@ -48,12 +49,7 @@ class CreditCard
     #   - Produce a hash (using default hash method) of the credit card's
     #     serialized contents.
     #   - Credit cards with identical information should produce the same hash
-    {
-      number: number,
-      expiration_date: expiration_date,
-      owner: owner,
-      credit_network: credit_network
-    }.to_json.hash
+    to_json.hash
   end
 
   # return a cryptographically secure hash
@@ -61,5 +57,7 @@ class CreditCard
     # TODO: implement this method
     #   - Use sha256 from openssl to create a cryptographically secure hash.
     #   - Credit cards with identical information should produce the same hash
+    sha256 = OpenSSL::Digest::SHA256.new
+    sha256.digest(to_json)
   end
 end

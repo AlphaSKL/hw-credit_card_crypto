@@ -3,6 +3,7 @@
 require_relative '../credit_card'
 require_relative '../substitution_cipher'
 require_relative '../double_trans_cipher'
+require_relative '../sk_cipher'
 require 'minitest/autorun'
 require 'yaml'
 
@@ -97,4 +98,19 @@ describe 'Test card info encryption' do
       end
     end
   end
+end
+
+describe 'Using SymmetricCipher cipher' do
+  before do
+    @cc = CreditCard.new('4916603231464963', 'Mar-30-2020',
+                         'Soumya Ray', 'Visa')
+    @key = ModernSymmetricCipher.generate_new_key
+  end
+
+  it 'should decrypt text' do
+    enc = ModernSymmetricCipher.encrypt(@cc, @key)
+    dec = ModernSymmetricCipher.decrypt(enc, @key)
+    _(dec).must_equal @cc.to_s
+  end
+
 end
