@@ -56,7 +56,7 @@ describe 'Test card info encryption' do
       end
 
       it 'should decrypt simple number' do
-        @num = "12345678"
+        @num = '12345678'
         enc = DoubleTranspositionCipher.encrypt(@num, @key)
         dec = DoubleTranspositionCipher.decrypt(enc, @key)
         _(dec).must_equal @num.to_s
