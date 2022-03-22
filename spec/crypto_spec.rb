@@ -3,6 +3,7 @@
 require_relative '../credit_card'
 require_relative '../substitution_cipher'
 require_relative '../double_trans_cipher'
+require_relative '../sk_cipher'
 require 'minitest/autorun'
 require 'yaml'
 
@@ -48,14 +49,14 @@ describe 'Test card info encryption' do
   describe 'Using DoubleTranspositionCipher cipher' do
     describe 'Happy simple test' do
       it 'should encrypt simple number' do
-        @num = "12345678"
+        @num = '12345678'
         enc = DoubleTranspositionCipher.encrypt(@num, @key)
         _(enc).wont_equal @cc.to_s
         _(enc).wont_be_nil
       end
 
       it 'should decrypt simple number' do
-        @num = "12345678"
+        @num = '12345678'
         enc = DoubleTranspositionCipher.encrypt(@num, @key)
         dec = DoubleTranspositionCipher.decrypt(enc, @key)
         _(dec).must_equal @num.to_s
@@ -73,7 +74,7 @@ describe 'Test card info encryption' do
         _(dec).must_equal @cc.to_s
       end
     end
-    
+
     cards.each do |name, numbers|
       describe "Test only valid card numbers: #{name}" do
         numbers['valid'].each do |number|
@@ -85,8 +86,8 @@ describe 'Test card info encryption' do
         end
       end
     end
-    
-    describe "Test a given card info with random keys" do
+
+    describe 'Test a given card info with random keys' do
       (1..10).each do |number|
         it "iteration #: #{number}" do
           @random_key = (rand * 10_000).to_i
@@ -95,6 +96,23 @@ describe 'Test card info encryption' do
           _(dec).must_equal @cc.to_s
         end
       end
+    end
+  end
+  # Symmetric Cipher
+  describe 'Using Symmetric Cipher' do
+    before do
+      @sym_key = ModernSymmetricCipher.generate_new_key
+    end
+    it 'should encrypt card information' do
+      enc = ModernSymmetricCipher.encrypt(@cc, @sym_key)
+      _(enc).wont_equal @cc.to_s
+      _(enc).wont_be_nil
+    end
+
+    it 'should decrypt text' do
+      enc = ModernSymmetricCipher.encrypt(@cc, @sym_key)
+      dec = ModernSymmetricCipher.decrypt(enc, @sym_key)
+      _(dec).must_equal @cc.to_s
     end
   end
 end
