@@ -49,7 +49,7 @@ describe 'Test card info encryption' do
   describe 'Using DoubleTranspositionCipher cipher' do
     describe 'Happy simple test' do
       it 'should encrypt simple number' do
-        @num = "12345678"
+        @num = '12345678'
         enc = DoubleTranspositionCipher.encrypt(@num, @key)
         _(enc).wont_equal @cc.to_s
         _(enc).wont_be_nil
@@ -74,7 +74,7 @@ describe 'Test card info encryption' do
         _(dec).must_equal @cc.to_s
       end
     end
-    
+
     cards.each do |name, numbers|
       describe "Test only valid card numbers: #{name}" do
         numbers['valid'].each do |number|
@@ -86,8 +86,8 @@ describe 'Test card info encryption' do
         end
       end
     end
-    
-    describe "Test a given card info with random keys" do
+
+    describe 'Test a given card info with random keys' do
       (1..10).each do |number|
         it "iteration #: #{number}" do
           @random_key = (rand * 10_000).to_i
@@ -98,8 +98,8 @@ describe 'Test card info encryption' do
       end
     end
   end
-  # Symmetric Cipher 
-  describe "Using Symmetric Cipher" do
+  # Symmetric Cipher
+  describe 'Using Symmetric Cipher' do
     before do
       @sym_key = ModernSymmetricCipher.generate_new_key
     end
