@@ -77,7 +77,7 @@ describe 'Test hashing requirements' do
     describe 'Check regular hash not same as cryptographic hash' do
       # TODO: Check that each card's hash is different from its hash_secure
       it "test ten round hash result is same or not" do
-        results = cards.map do |card|
+        cards.each do |card|
           _(card.hash_secure).wont_equal card.hash
         end
       end
