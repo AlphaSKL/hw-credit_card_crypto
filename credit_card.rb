@@ -2,7 +2,7 @@
 
 require_relative './luhn_validator'
 require 'json'
-require 'digest'
+require 'rbnacl'
 
 # Crypto on credit card, including error checking (data integrity) algorithm and very elementary crypto algorithms
 class CreditCard
@@ -57,6 +57,6 @@ class CreditCard
     # TODO: implement this method
     #   - Use sha256 to create a cryptographically secure hash.
     #   - Credit cards with identical information should produce the same hash
-    Digest::SHA256.digest to_json
+    RbNaCl::Hash.sha256(to_json)
   end
 end
